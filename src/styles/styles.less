@@ -1,0 +1,42 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+.app {
+  height: 100vh;
+  .chart_container {
+    display: table-cell;
+    vertical-align: middle;
+    margin: auto auto;
+    max-width: calc(100vh - 4px);
+    display: block;
+    /* AXES */
+    /* ticks */
+    .axis {
+      /* axis text */
+      text {
+        fill: #2b2929;
+        font-family: 'Open Sans';
+        font-size: 120%;
+      }
+    }
+    /* LINE CHART */
+    path.line {
+      fill: none;
+    }
+    .serie_label {
+      font-family: 'Open Sans';
+      font-size: 30px;
+      font-weight: 700;
+    }
+    .dot {
+    }
+    .dot_text {
+      font-family: 'Open Sans';
+      font-size: 20px;
+    }
+  }
+}
+
+@import 'basics.less';
