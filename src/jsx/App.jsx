@@ -27,12 +27,12 @@ const getHashValue = (key) => {
 }
 
 const data_type = getHashValue('type') ? getHashValue('type') : 'drivers',
-      title = getHashValue('title') ? getHashValue('title').replace(/%20/g, ' ') : 'Title battle 2021';
+      title = getHashValue('title') ? (getHashValue('title') === 'false') ? '' : '<h1>' + getHashValue('title').replace(/%20/g, ' ') + '</h1>' : '<h1>Title battle 2021</h1>';
 
 const max_y_axis_value = (data_type === 'drivers') ? 200 : 300,
       max_y_axis_step = (data_type === 'drivers') ? 25 : 50,
       title_offset = (data_type === 'drivers') ? 13 : 10,
-      title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '"><h1>' + title + '</h1><div><h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>' : '<div class="' + style.title_container + '"><h1>' + title + '</h1><div><h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Red Bull Racing Honda</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Mercedes AMG Petronas</span></h3></div></div>',
+      title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>' : '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Red Bull Racing Honda</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Mercedes AMG Petronas</span></h3></div></div>',
       races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2'];
 
 class App extends Component {
@@ -54,7 +54,7 @@ class App extends Component {
   createChart() {
     const width = 600,
           height = 600,
-          adj = 45;
+          adj = 50;
 
     // We are appending SVG first.
     const svg = d3.select('.' + style.chart_container).append('svg')
@@ -210,7 +210,7 @@ class App extends Component {
       svg.append('foreignObject')
         .attr('text-anchor', 'middle')
         .attr('width', 450)
-        .attr('x', xScale(0.7))
+        .attr('x', xScale(1))
         .attr('y', yScale(max_y_axis_value - title_offset))
         .attr('height', 200)
         .attr('alignment-baseline', 'central')

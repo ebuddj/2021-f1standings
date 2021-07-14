@@ -15,7 +15,7 @@ body {
       text {
         fill: #2b2929;
         font-family: 'Orbitron';
-        font-size: 13px;
+        font-size: 10pt;
         font-weight: 600;
       }
       image {
@@ -32,7 +32,7 @@ body {
     .dot_text {
       filter: drop-shadow(0px 0px 1px #fff);
       font-family: 'Orbitron';
-      font-size: 18px;
+      font-size: 15pt;
       letter-spacing: 1px;
     }
     .grid {
@@ -44,44 +44,50 @@ body {
         stroke: #dddddd;
       }
     }
-    .title_container {
-      font-family: 'Orbitron';
-      h1 {
-        background-color: #000;
-        color: #fff;
-        display: inline-block;
-        font-size: 28px;
-        font-weight: 600;
-        margin: 0 0 30px 0;
-        padding: 5px 10px;
-        text-transform: uppercase;
-      }
-      h3 {
-        color: #000;
-        font-size: 20px;
-        font-weight: 600;
-        margin: 0 0 15px 0;
-        .position {
-          display: inline-block;
-          margin-right: 5px;
-          text-align: center;
-          width: 22px;
-        }
-        .name {
+    foreignObject {
+      overflow: visible;
+      .title_container {
+        font-family: 'Orbitron';
+        overflow: visible;
+        h1 {
+          background-color: #000;
           color: #fff;
           display: inline-block;
-          margin-right: 5px;
-          padding: 2px 5px;
+          font-size: 25pt;
+          font-weight: 600;
+          margin: 0 0 30px 0;
+          padding: 5px 10px;
           text-transform: uppercase;
         }
-        &.redbull {
-          .name {
-            background-color: #0600ef;
+        h3 {
+          color: #000;
+          font-size: 15pt;
+          font-weight: 600;
+          margin: 0 0 15px -27px;
+          .position {
+            display: inline-block;
+            margin-right: 5px;
+            text-align: center;
+            width: 22px;
           }
-        }
-        &.mercedes {
           .name {
-            background-color: #00d2be;
+            color: #fff;
+            display: inline-block;
+            padding: 2px 8px;
+            text-transform: uppercase;
+          }
+          .team {
+            margin-left: 5px;
+          }
+          &.redbull {
+            .name {
+              background-color: #0600ef;
+            }
+          }
+          &.mercedes {
+            .name {
+              background-color: #00d2be;
+            }
           }
         }
       }
