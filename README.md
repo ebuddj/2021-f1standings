@@ -13,7 +13,7 @@ This implementation is inspired by this post: https://www.instagram.com/p/CQ4ApH
 * Team standings: https://ebuddj.github.io/2021-f1standings/#type=teams
 * Custom title: https://ebuddj.github.io/2021-f1standings/#type=drivers&title=my%20title%202021
   * Note1: add spaces with `%20` syntax
-  * Note2: to remove title use `title=false`: 
+  * Note2: to remove title use `title=false`
 
 **Sources**
 * [ESPN](https://www.espn.com/f1/standings)
