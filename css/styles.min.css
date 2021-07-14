@@ -16,7 +16,7 @@ body {
 .app___2khK2 .chart_container___3Jzlm .axis___3Jp_c text {
   fill: #2b2929;
   font-family: 'Orbitron';
-  font-size: 13px;
+  font-size: 10pt;
   font-weight: 600;
 }
 .app___2khK2 .chart_container___3Jzlm .axis___3Jp_c image {
@@ -31,7 +31,7 @@ body {
 .app___2khK2 .chart_container___3Jzlm .dot_text___2pF49 {
   filter: drop-shadow(0px 0px 1px #fff);
   font-family: 'Orbitron';
-  font-size: 18px;
+  font-size: 15pt;
   letter-spacing: 1px;
 }
 .app___2khK2 .chart_container___3Jzlm .grid___3zkE4 path {
@@ -41,42 +41,48 @@ body {
   stroke-dasharray: 2;
   stroke: #dddddd;
 }
-.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 {
-  font-family: 'Orbitron';
+.app___2khK2 .chart_container___3Jzlm foreignObject {
+  overflow: visible;
 }
-.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 h1 {
+.app___2khK2 .chart_container___3Jzlm foreignObject .title_container___28dn4 {
+  font-family: 'Orbitron';
+  overflow: visible;
+}
+.app___2khK2 .chart_container___3Jzlm foreignObject .title_container___28dn4 h1 {
   background-color: #000;
   color: #fff;
   display: inline-block;
-  font-size: 28px;
+  font-size: 25pt;
   font-weight: 600;
   margin: 0 0 30px 0;
   padding: 5px 10px;
   text-transform: uppercase;
 }
-.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 h3 {
+.app___2khK2 .chart_container___3Jzlm foreignObject .title_container___28dn4 h3 {
   color: #000;
-  font-size: 20px;
+  font-size: 15pt;
   font-weight: 600;
-  margin: 0 0 15px 0;
+  margin: 0 0 15px -27px;
 }
-.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 h3 .position___1AoVA {
+.app___2khK2 .chart_container___3Jzlm foreignObject .title_container___28dn4 h3 .position___1AoVA {
   display: inline-block;
   margin-right: 5px;
   text-align: center;
   width: 22px;
 }
-.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 h3 .name___3S6H7 {
+.app___2khK2 .chart_container___3Jzlm foreignObject .title_container___28dn4 h3 .name___3S6H7 {
   color: #fff;
   display: inline-block;
-  margin-right: 5px;
-  padding: 2px 5px;
+  padding: 2px 8px;
   text-transform: uppercase;
 }
-.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 h3.redbull___1v1d- .name___3S6H7 {
+.app___2khK2 .chart_container___3Jzlm foreignObject .title_container___28dn4 h3 .team___2Ipw9 {
+  margin-left: 5px;
+}
+.app___2khK2 .chart_container___3Jzlm foreignObject .title_container___28dn4 h3.redbull___1v1d- .name___3S6H7 {
   background-color: #0600ef;
 }
-.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 h3.mercedes___2KI6v .name___3S6H7 {
+.app___2khK2 .chart_container___3Jzlm foreignObject .title_container___28dn4 h3.mercedes___2KI6v .name___3S6H7 {
   background-color: #00d2be;
 }
 /* General styles */
