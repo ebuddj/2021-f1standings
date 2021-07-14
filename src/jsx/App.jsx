@@ -6,8 +6,10 @@ import * as d3 from 'd3';
 
 import { IT,PT,ES,MC,AZ,FR,AT } from 'round-flags';
 
+// https://www.countryflags.com/brunei-flag-icon/
 import BN from './../../media/img/BN.png';
 
+// https://www.iban.com/country-codes
 let flags = {};
 flags['BRN'] = BN;
 flags['ITA'] = IT;
