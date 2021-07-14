@@ -4,14 +4,14 @@ import style from './../styles/styles.less';
 // https://d3js.org/
 import * as d3 from 'd3';
 
-import { IT,PT,ES,MC,AZ,FR,AT } from 'round-flags';
+import { BH,IT,PT,ES,MC,AZ,FR,AT } from 'round-flags';
 
 // https://www.countryflags.com/brunei-flag-icon/
 import BN from './../../media/img/BN.png';
 
 // https://www.iban.com/country-codes
 let flags = {};
-flags['BRN'] = BN;
+flags['BRN'] = BH;
 flags['ITA'] = IT;
 flags['POR'] = PT;
 flags['ESP'] = ES;
@@ -45,7 +45,7 @@ class App extends Component {
   createChart() {
     const width = 600,
           height = 600,
-          adj = 40;
+          adj = 45;
 
     // We are appending SVG first.
     const svg = d3.select('.' + style.chart_container).append('svg')
@@ -181,6 +181,15 @@ class App extends Component {
           return (d.highlighted === true) ? d.y : '';
         });
 
+      svg.append('foreignObject')
+        .attr('text-anchor', 'middle')
+        .attr('width', 450)
+        .attr('x', xScale(0.5))
+        .attr('y', yScale(185))
+        .attr('height', 200)
+        .attr('alignment-baseline', 'central')
+        .html('<div class="' + style.title_container + '"><h1>Title battle 2021</h1><div><h3 class="' + style.redbull + '"><span class="' + style.name + '">Max Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.name + '">Lewis Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>');
+
       // lines.append('text')
       //   .attr('class', style.serie_label)
       //   .datum((d) => {
@@ -193,7 +202,7 @@ class App extends Component {
       //   })
       //   .attr('fill', (d, i) => { return d.color; })
       //   .attr('transform', (d, i) => {
-      //     return 'translate(' + (xScale(1) + 30) + ',' + (yScale(d.value.points) + 5 ) + ')'; 
+      //     return 'translate(' + (xScale(1)) + ',' + (yScale(160 - (i * 15)) + 5 ) + ')'; 
       //   })
       //   .attr('x', 5)
       //   .text((d) => { return (d.highlighted == true) ? d.name : ''; });

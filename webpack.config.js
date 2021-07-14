@@ -69,8 +69,8 @@ module.exports = {
   plugins: [
     new GoogleFontsPlugin({
       fonts: [{
-        family: 'Open Sans',
-        variants: ['300', '400', '600', '700']
+        family: 'Orbitron',
+        variants: ['400', '600']
       }]
     }),
     new HtmlWebPackPlugin({
