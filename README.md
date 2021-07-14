@@ -4,7 +4,13 @@
 
 ## F1 standings development (EBU)
 
-This implmentation is inspired by this post: https://www.instagram.com/p/CQ4ApHLIHDW/
+This implmentation is inspired by this post: https://www.instagram.com/p/CQ4ApHLIHDW/.
+
+### Customatizations
+* Driver standings: https://ebuddj.github.io/2021-f1standings/#type=drivers
+* Team standings: https://ebuddj.github.io/2021-f1standings/#type=teams
+* Custom title: https://ebuddj.github.io/2021-f1standings/#type=drivers&title=my%20title%202021
+  * Note: add spaces with `%20` syntax
 
 **Sources**
 * [ESPN](https://www.espn.com/f1/standings)

@@ -10,7 +10,8 @@ import { BH,IT,PT,ES,MC,AZ,FR,AT } from 'round-flags';
 import BN from './../../media/img/BN.png';
 
 // https://www.iban.com/country-codes
-let flags = {};
+let interval,
+    flags = {};
 flags['BHR'] = BH;
 flags['ITA'] = IT;
 flags['PRT'] = PT;
@@ -21,9 +22,18 @@ flags['FRA'] = FR;
 flags['AUT'] = AT;
 flags['AUT2'] = AT;
 
-let interval;
-const max_y_axis_value = 200,
+
+const getHashValue = (key) => {
+  let matches = location.hash.match(new RegExp(key+'=([^&]*)'));
+  return matches ? matches[1] : null;
+}
+
+const data_type = getHashValue('type') ? getHashValue('type') : 'drivers',
+      title = getHashValue('title') ? getHashValue('title').replace(/%20/g, ' ') : 'Title battle 2021';
+
+const max_y_axis_value = (data_type === 'drivers') ? 200 : 300,
       max_y_axis_step = 25,
+      title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '"><h1>' + title + '</h1><div><h3 class="' + style.redbull + '"><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>' : '<div class="' + style.title_container + '"><h1>' + title + '</h1><div><h3 class="' + style.redbull + '"><span class="' + style.name + '">Red Bull Racing Honda</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.name + '">Mercedes AMG Petronas</span></h3></div></div>',
       races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2'];
 
 class App extends Component {
@@ -54,7 +64,7 @@ class App extends Component {
       .classed('svg-content', true);
 
     // Fetch the data.
-    d3.csv('./data/data - data.csv').then((data) => {
+    d3.csv('./data/data - ' + data_type + ' - data.csv').then((data) => {
       let data_points = [];
       let slices = data.map((values, i) => {
         return {
@@ -202,10 +212,10 @@ class App extends Component {
         .attr('text-anchor', 'middle')
         .attr('width', 450)
         .attr('x', xScale(0.7))
-        .attr('y', yScale(187))
+        .attr('y', yScale(max_y_axis_value - 13))
         .attr('height', 200)
         .attr('alignment-baseline', 'central')
-        .html('<div class="' + style.title_container + '"><h1>Title battle 2021</h1><div><h3 class="' + style.redbull + '"><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>');
+        .html(title_html);
 
       // lines.append('text')
       //   .attr('class', style.serie_label)
