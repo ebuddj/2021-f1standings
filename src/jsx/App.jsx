@@ -4,6 +4,7 @@ import style from './../styles/styles.less';
 // https://d3js.org/
 import * as d3 from 'd3';
 
+let interval;
 const races = ['','BRN','ITA','POR','ESP','MON','AZB','FRA','AUT','AUT2'];
 
 class App extends Component {
@@ -17,24 +18,22 @@ class App extends Component {
     const width = 600;
     const height = 600;
     const adj = 30;
-    // we are appending SVG first
+    // We are appending SVG first.
     const svg = d3.select('.' + style.chart_container).append('svg')
-      //.attr('preserveAspectRatio', 'xMinYMin meet')
-      .attr('viewBox', '-' + adj + ' -' + adj + ' ' + (width + adj *3) + ' ' + (height + adj*3))
+      .attr('preserveAspectRatio', 'xMinYMin meet')
+      .attr('viewBox', '-' + adj + ' -' + adj + ' ' + (width + adj * 3) + ' ' + (height + adj * 3))
       .classed('svg-content', true);
 
-    //-----------------------------DATA-----------------------------//
-    const dataset = d3.csv('./data/data.csv');
-    let data_points = [];
-
+    // Data.
     d3.csv('./data/data - data.csv').then((data) => {
+      let data_points = [];
       let slices = data.map((values, i) => {
         return {
           color:(i === 0) ? '#0600ef' : (i === 1) ? '#00d2be' : 'rgba(0, 0, 0, 0.5)', 
           highlighted:(i < 2) ? true : false,
           name:values.name,
           values:races.map((race, j) => {
-            let max = d3.max(data, function(d) { return +d[race]; });
+            let max = d3.max(data, (d) => { return +d[race]; });
             if (race !== '') {
               data_points.push({
                 color:(i === 0) ? '#0600ef' : (i === 1) ? '#00d2be' : 'rgba(0, 0, 0, 0.5)', 
@@ -51,14 +50,32 @@ class App extends Component {
           })
         }
       })
-      //----------------------------SCALES----------------------------//
+
+      let to_be_added_slices = {};
+
+      slices = slices.map((slice, i) => {
+        to_be_added_slices[i] = slice.values.splice(-slice.values.length + 1);
+        return slice;
+      });
+
+      interval = setInterval(() => {
+        slices = slices.map((slice, i) => {
+          slice.values.push(to_be_added_slices[i].shift());
+          return slice;
+        });
+        if (to_be_added_slices[0].length === 0) {
+          clearInterval(interval);
+        }
+        updateData();
+      }, 1000);
+
+      // Scales.
       const xScale = d3.scaleLinear().range([0, width]);
       const yScale = d3.scaleLinear().range([height, 0]);
-
       xScale.domain([0, races.length - 1]);
       yScale.domain([0, 200]);
 
-      //-----------------------------AXES-----------------------------//
+      // Axes.
       const yaxis = d3.axisLeft()
         .ticks(4)
         .scale(yScale);
@@ -68,19 +85,12 @@ class App extends Component {
         .tickFormat((i) => { return races[i]; })
         .scale(xScale);
 
-      //----------------------------LINES-----------------------------//
-      const line = d3.line()
-        .x((d, i) => { return xScale(i); })
-        .y((d, i) => { return yScale(d.points); }); 
-
-      //-------------------------2. DRAWING---------------------------//
-      //-----------------------------AXES-----------------------------//
       svg.append('g')
         .attr('class', style.axis)
         .attr('transform', 'translate(0,' + height + ')')
         .call(xaxis);
 
-       svg.append('g')
+      svg.append('g')
         .attr('class', style.axis)
         .call(yaxis)
         .append('text')
@@ -90,33 +100,45 @@ class App extends Component {
         .style('text-anchor', 'end')
         .text('Points');
 
-      //----------------------------LINES-----------------------------//
-      const lines = svg.selectAll('lines')
-        .data(slices)
-        .enter().append('g');
+      // Lines.
+      let updateData = () => {
+        // Remove any old lines.
+        svg.selectAll('.' + style.line).remove();
 
-      lines.append('path')
-        .attr('class', style.line)
-        .attr('stroke', (d, i) => { return d.color; })
-        .attr('stroke-width', (d) => { return (d.highlighted === true) ? '3px': '1px'; })
-        .attr('d', (d) => { return line(d.values); });
+        // Add the lines.
+        const line = d3.line()
+          .x((d, i) => { return xScale(i); })
+          .y((d, i) => { return yScale(d.points); });
 
-      lines.append('text')
-        .attr('class', style.serie_label)
-        .datum((d) => {
-          return {
-            color:d.color,
-            highlighted:d.highlighted,
-            name:d.name,
-            value:d.values[d.values.length - 1]
-          }; 
-        })
-        .attr('fill', (d, i) => { return d.color; })
-        .attr('transform', (d, i) => {
-          return 'translate(' + (xScale(1) + 30) + ',' + (yScale(d.value.points) + 5 ) + ')'; 
-        })
-        .attr('x', 5)
-        .text((d) => { return (d.highlighted == true) ? d.name : ''; });
+        const lines = svg.selectAll('lines')
+          .data(slices)
+          .enter().append('g');
+
+        lines.append('path')
+          .attr('class', style.line)
+          .attr('stroke', (d, i) => { return d.color; })
+          .attr('stroke-width', (d) => { return (d.highlighted === true) ? '3px': '1px'; })
+          .attr('d', (d) => { return line(d.values); });
+
+      };
+      updateData();
+      
+      // lines.append('text')
+      //   .attr('class', style.serie_label)
+      //   .datum((d) => {
+      //     return {
+      //       color:d.color,
+      //       highlighted:d.highlighted,
+      //       name:d.name,
+      //       value:d.values[d.values.length - 1]
+      //     }; 
+      //   })
+      //   .attr('fill', (d, i) => { return d.color; })
+      //   .attr('transform', (d, i) => {
+      //     return 'translate(' + (xScale(1) + 30) + ',' + (yScale(d.value.points) + 5 ) + ')'; 
+      //   })
+      //   .attr('x', 5)
+      //   .text((d) => { return (d.highlighted == true) ? d.name : ''; });
 
       // Add dots.
       svg.selectAll('.' + style.dot)
@@ -155,7 +177,7 @@ class App extends Component {
 
   }
   componentWillUnMount() {
-
+    clearInterval(interval);
   }
   // shouldComponentUpdate(nextProps, nextState) {}
   // static getDerivedStateFromProps(props, state) {}
