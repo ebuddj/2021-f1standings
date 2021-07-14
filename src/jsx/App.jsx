@@ -4,11 +4,8 @@ import style from './../styles/styles.less';
 // https://d3js.org/
 import * as d3 from 'd3';
 
+// https://github.com/Tarkeasy/round-flags
 import { BH,IT,PT,ES,MC,AZ,FR,AT } from 'round-flags';
-
-// https://www.countryflags.com/brunei-flag-icon/
-import BN from './../../media/img/BN.png';
-
 // https://www.iban.com/country-codes
 let interval,
     flags = {};

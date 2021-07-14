@@ -6,7 +6,7 @@
 
 This implementation is inspired by this post: https://www.instagram.com/p/CQ4ApHLIHDW/.
 
-!!! Updated after each race !!!
+!!! The graphic is updated after each race !!!
 
 ### Customatizations
 * Driver standings: https://ebuddj.github.io/2021-f1standings/#type=drivers
