@@ -28,6 +28,21 @@
 		url("./font/OpenSans-Regular.svg") format("svg");
 }
 
+/* === Open Sans - 600 */
+@font-face {
+	font-family: 'Open Sans';
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url("./font/OpenSans-SemiBold.eot");
+	src: local('Open Sans'),
+		url("./font/OpenSans-SemiBold.eot") format("embedded-opentype"),
+		url("./font/OpenSans-SemiBold.woff2") format("woff2"),
+		url("./font/OpenSans-SemiBold.woff") format("woff"),
+		url("./font/OpenSans-SemiBold.ttf") format("truetype"),
+		url("./font/OpenSans-SemiBold.svg") format("svg");
+}
+
 /* === Open Sans - 700 */
 @font-face {
 	font-family: 'Open Sans';
