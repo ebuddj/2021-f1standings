@@ -32,7 +32,7 @@ const data_type = getHashValue('type') ? getHashValue('type') : 'drivers',
       title = getHashValue('title') ? getHashValue('title').replace(/%20/g, ' ') : 'Title battle 2021';
 
 const max_y_axis_value = (data_type === 'drivers') ? 200 : 300,
-      max_y_axis_step = 25,
+      max_y_axis_step = (data_type === 'drivers') ? 25 : 50,
       title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '"><h1>' + title + '</h1><div><h3 class="' + style.redbull + '"><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>' : '<div class="' + style.title_container + '"><h1>' + title + '</h1><div><h3 class="' + style.redbull + '"><span class="' + style.name + '">Red Bull Racing Honda</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.name + '">Mercedes AMG Petronas</span></h3></div></div>',
       races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2'];
 
