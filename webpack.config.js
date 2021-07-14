@@ -70,7 +70,7 @@ module.exports = {
     new GoogleFontsPlugin({
       fonts: [{
         family: 'Open Sans',
-        variants: ['300', '400', '700']
+        variants: ['300', '400', '600', '700']
       }]
     }),
     new HtmlWebPackPlugin({

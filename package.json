@@ -35,6 +35,7 @@
     "@beyonk/google-fonts-webpack-plugin": "^1.7.0",
     "chart.js": "^3.4.1",
     "chartjs-plugin-datalabels": "^2.0.0",
-    "d3": "^7.0.0"
+    "d3": "^7.0.0",
+    "round-flags": "^1.0.2"
   }
 }
