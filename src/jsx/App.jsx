@@ -6,6 +6,7 @@ import * as d3 from 'd3';
 
 // https://github.com/Tarkeasy/round-flags
 import { BH,IT,PT,ES,MC,AZ,FR,AT } from 'round-flags';
+
 // https://www.iban.com/country-codes
 let interval,
     flags = {};
@@ -30,7 +31,8 @@ const data_type = getHashValue('type') ? getHashValue('type') : 'drivers',
 
 const max_y_axis_value = (data_type === 'drivers') ? 200 : 300,
       max_y_axis_step = (data_type === 'drivers') ? 25 : 50,
-      title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '"><h1>' + title + '</h1><div><h3 class="' + style.redbull + '"><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>' : '<div class="' + style.title_container + '"><h1>' + title + '</h1><div><h3 class="' + style.redbull + '"><span class="' + style.name + '">Red Bull Racing Honda</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.name + '">Mercedes AMG Petronas</span></h3></div></div>',
+      title_offset = (data_type === 'drivers') ? 13 : 10,
+      title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '"><h1>' + title + '</h1><div><h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>' : '<div class="' + style.title_container + '"><h1>' + title + '</h1><div><h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Red Bull Racing Honda</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Mercedes AMG Petronas</span></h3></div></div>',
       races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2'];
 
 class App extends Component {
@@ -101,7 +103,7 @@ class App extends Component {
       yScale.domain([0, max_y_axis_value]);
 
       // Grid lines.
-      let make_y_gridlines = () => {
+      const make_y_gridlines = () => {
         return d3.axisLeft(yScale).ticks(parseInt(max_y_axis_value / max_y_axis_step) - 1).tickValues(d3.range(0, max_y_axis_value, max_y_axis_step));
       }
       // Add the Y gridlines
@@ -145,7 +147,7 @@ class App extends Component {
 
       // Create the lines with current data..
       const lines = svg.selectAll('lines').data(slices).enter().append('g');
-      let updateData = () => {
+      const updateData = () => {
         // Remove any old lines.
         svg.selectAll('.' + style.line).remove();
 
@@ -209,27 +211,10 @@ class App extends Component {
         .attr('text-anchor', 'middle')
         .attr('width', 450)
         .attr('x', xScale(0.7))
-        .attr('y', yScale(max_y_axis_value - 13))
+        .attr('y', yScale(max_y_axis_value - title_offset))
         .attr('height', 200)
         .attr('alignment-baseline', 'central')
         .html(title_html);
-
-      // lines.append('text')
-      //   .attr('class', style.serie_label)
-      //   .datum((d) => {
-      //     return {
-      //       color:d.color,
-      //       highlighted:d.highlighted,
-      //       name:d.name,
-      //       value:d.values[d.values.length - 1]
-      //     }; 
-      //   })
-      //   .attr('fill', (d, i) => { return d.color; })
-      //   .attr('transform', (d, i) => {
-      //     return 'translate(' + (xScale(1)) + ',' + (yScale(160 - (i * 15)) + 5 ) + ')'; 
-      //   })
-      //   .attr('x', 5)
-      //   .text((d) => { return (d.highlighted == true) ? d.name : ''; });
     });
   }
   // shouldComponentUpdate(nextProps, nextState) {}
