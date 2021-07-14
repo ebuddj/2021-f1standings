@@ -33,6 +33,13 @@ body {
   font-size: 18px;
   letter-spacing: 1px;
 }
+.app___2khK2 .chart_container___3Jzlm .grid___3zkE4 path {
+  display: none;
+}
+.app___2khK2 .chart_container___3Jzlm .grid___3zkE4 line {
+  stroke-dasharray: 2;
+  stroke: #dddddd;
+}
 .app___2khK2 .chart_container___3Jzlm .title_container___28dn4 {
   font-family: 'Orbitron';
 }
@@ -42,7 +49,7 @@ body {
   display: inline-block;
   font-size: 28px;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin: 0 0 30px 0;
   padding: 5px 10px;
   text-transform: uppercase;
 }
@@ -50,7 +57,7 @@ body {
   color: #000;
   font-size: 20px;
   font-weight: 600;
-  margin: 0 0 10px 0;
+  margin: 0 0 15px 0;
 }
 .app___2khK2 .chart_container___3Jzlm .title_container___28dn4 h3 .name___3S6H7 {
   color: #fff;
