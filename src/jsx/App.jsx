@@ -11,12 +11,12 @@ import BN from './../../media/img/BN.png';
 
 // https://www.iban.com/country-codes
 let flags = {};
-flags['BRN'] = BH;
+flags['BHR'] = BH;
 flags['ITA'] = IT;
-flags['POR'] = PT;
+flags['PRT'] = PT;
 flags['ESP'] = ES;
-flags['MON'] = MC;
-flags['AZB'] = AZ;
+flags['MCO'] = MC;
+flags['AZE'] = AZ;
 flags['FRA'] = FR;
 flags['AUT'] = AT;
 flags['AUT2'] = AT;
@@ -24,7 +24,7 @@ flags['AUT2'] = AT;
 let interval;
 const max_y_axis_value = 200,
       max_y_axis_step = 25,
-      races = ['','BRN','ITA','POR','ESP','MON','AZB','FRA','AUT','AUT2'];
+      races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2'];
 
 class App extends Component {
   constructor(props) {
