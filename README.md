@@ -4,6 +4,8 @@
 
 ## F1 standings development (EBU)
 
+This implmentation is inspired by this post: https://www.instagram.com/p/CQ4ApHLIHDW/
+
 **Sources**
 * [ESPN](https://www.espn.com/f1/standings)
 

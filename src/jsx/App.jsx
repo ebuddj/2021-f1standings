@@ -93,20 +93,36 @@ class App extends Component {
       xScale.domain([0, races.length - 1]);
       yScale.domain([0, max_y_axis_value]);
 
-      // Axes.
+      // Grid lines.
+      let make_y_gridlines = () => {
+        return d3.axisLeft(yScale).ticks(parseInt(max_y_axis_value / max_y_axis_step) - 1).tickValues(d3.range(0, max_y_axis_value, max_y_axis_step));
+      }
+      // Add the Y gridlines
+      svg.append('g')
+        .attr('class', style.grid)
+        .call(make_y_gridlines()
+            .tickSize(-width - 20)
+            .tickFormat('')
+        );
+
+      // Grid Axes.
       const xaxis = d3.axisBottom().ticks(races.length - 1).tickFormat((i) => { return races[i]; }).scale(xScale);
       svg.append('g')
-        .attr('class', style.axis)
+        .attr('class', style.axis + ' ' + style.xaxis)
         .attr('transform', 'translate(0,' + height + ')')
-        .call(xaxis);
+        .call(xaxis)
+        .append('text')
+        .attr('y', 43)
+        .attr('x', 3)
+        .attr('text-anchor', 'middle')
+        .text('Races');
 
-      svg.select('.' + style.axis).selectAll('text');
       svg.select('.' + style.axis).selectAll('.tick')
-                    .data(races)
-                    .append('svg:image')
-                    .attr('class', style.axis_image)
-                    .attr('xlink:href', (d) => { return flags[d]; })
-                    .attr('height', 30).attr('width', 30).attr('x', -15).attr('y', 25);
+                                  .data(races)
+                                  .append('svg:image')
+                                  .attr('class', style.axis_image)
+                                  .attr('xlink:href', (d) => { return flags[d]; })
+                                  .attr('height', 30).attr('width', 30).attr('x', -15).attr('y', 25);
 
       const yaxis = d3.axisLeft().ticks(parseInt(max_y_axis_value / max_y_axis_step)).tickValues(d3.range(0, max_y_axis_value + max_y_axis_step, max_y_axis_step)).scale(yScale);
       svg.append('g')
@@ -118,6 +134,7 @@ class App extends Component {
         .attr('y', 6)
         .style('text-anchor', 'end')
         .text('Points');
+
 
       // Create the lines with current data..
       const lines = svg.selectAll('lines').data(slices).enter().append('g');
@@ -184,11 +201,11 @@ class App extends Component {
       svg.append('foreignObject')
         .attr('text-anchor', 'middle')
         .attr('width', 450)
-        .attr('x', xScale(0.5))
-        .attr('y', yScale(185))
+        .attr('x', xScale(0.7))
+        .attr('y', yScale(187))
         .attr('height', 200)
         .attr('alignment-baseline', 'central')
-        .html('<div class="' + style.title_container + '"><h1>Title battle 2021</h1><div><h3 class="' + style.redbull + '"><span class="' + style.name + '">Max Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.name + '">Lewis Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>');
+        .html('<div class="' + style.title_container + '"><h1>Title battle 2021</h1><div><h3 class="' + style.redbull + '"><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>');
 
       // lines.append('text')
       //   .attr('class', style.serie_label)
