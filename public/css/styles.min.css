@@ -15,7 +15,7 @@ body {
 }
 .app___2khK2 .chart_container___3Jzlm .axis___3Jp_c text {
   fill: #2b2929;
-  font-family: 'Open Sans';
+  font-family: 'Orbitron';
   font-size: 13px;
   font-weight: 600;
 }
@@ -25,17 +25,45 @@ body {
 .app___2khK2 .chart_container___3Jzlm path.line___1JHCa {
   fill: none;
 }
-.app___2khK2 .chart_container___3Jzlm .serie_label___d6MlC {
-  font-family: 'Open Sans';
-  font-size: 30px;
-  font-weight: 700;
-}
 .app___2khK2 .chart_container___3Jzlm .dot___1MBWA {
   filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.8));
 }
 .app___2khK2 .chart_container___3Jzlm .dot_text___2pF49 {
-  font-family: 'Open Sans';
+  font-family: 'Orbitron';
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 {
+  font-family: 'Orbitron';
+}
+.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 h1 {
+  background-color: #000;
+  color: #fff;
+  display: inline-block;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  text-transform: uppercase;
+}
+.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 h3 {
+  color: #000;
   font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+}
+.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 h3 .name___3S6H7 {
+  color: #fff;
+  display: inline-block;
+  margin-right: 5px;
+  padding: 2px 5px;
+  text-transform: uppercase;
+}
+.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 h3.redbull___1v1d- .name___3S6H7 {
+  background-color: #0600ef;
+}
+.app___2khK2 .chart_container___3Jzlm .title_container___28dn4 h3.mercedes___2KI6v .name___3S6H7 {
+  background-color: #00d2be;
 }
 /* General styles */
 .clearfix___1yHqr {

@@ -174,7 +174,7 @@ class App extends Component {
           return (d.position === 'top') ? yScale(d.y + 10) : yScale(d.y - 10);
         })
         .style('font-weight', (d, i) => {
-          return (d.position === 'top') ? '700' : '300';
+          return (d.position === 'top') ? '600' : '400';
         })
         .attr('class', style.dot_text)
         .text((d) => {
