@@ -222,7 +222,7 @@ class App extends Component {
              });
         }
         updateData();
-      }, 1);
+      }, 1000);
       
       // Add dots.
       svg.selectAll('.' + style.dot)
