@@ -7,9 +7,10 @@ import * as d3 from 'd3';
 // https://github.com/Tarkeasy/round-flags
 import { BH,IT,PT,ES,MC,AZ,FR,AT } from 'round-flags';
 
-// https://www.iban.com/country-codes
-let interval,
+let interval1,
+    interval2,
     flags = {};
+// https://www.iban.com/country-codes
 flags['BHR'] = BH;
 flags['ITA'] = IT;
 flags['PRT'] = PT;
@@ -43,13 +44,16 @@ class App extends Component {
     }
   }
   componentDidMount() {
-    this.createChart();
+    setTimeout(() => {
+      this.createChart();
+    }, 500);
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
 
   }
   componentWillUnMount() {
-    clearInterval(interval);
+    clearInterval(interval1);
+    clearInterval(interval2);
   }
   createChart() {
     const width = 600,
@@ -174,55 +178,37 @@ class App extends Component {
       };
 
       // Add data in an interval.
-      interval = setInterval(() => {
+      interval1 = setInterval(() => {
         slices = slices.map((slice, i) => {
           slice.values.push(to_be_added_slices[i].shift());
           return slice;
         });
-        if (to_be_added_slices[0].length === 0) {
-          clearInterval(interval);
-          svg.selectAll('lines_interactivity').data(slices).enter().append('g').append('path')
-            .attr('class', style.line_interactivity)
-            .attr('data-line-id', (d, i) => 'line_' + i)
-            .attr('stroke', (d) => 'transparent')
-            .attr('stroke-opacity', (d) => 1)
-            .attr('stroke-width', (d) => (d.highlighted === true) ? '0': '10px')
-            .attr('d', (d) => line(d.values))
-            .on('mouseover', (event, d) => {
-              d3.select('.' + d3.select(event.currentTarget).attr('data-line-id'))
-                .attr('stroke', '#000')
-                .attr('stroke-width', '2px');
-              d3.selectAll('.' + style.dot + '.dot_' + d3.select(event.currentTarget).attr('data-line-id'))
-                .attr('r', 4)
-                .attr('fill', '#000');
-              d3.selectAll('.' + style.dot_text)
-                .style('font-size', 0)
-              d3.selectAll('.' + style.dot_text + '.dot_' + d3.select(event.currentTarget).attr('data-line-id'))
-                .style('font-size', '13pt');
-              div.transition()
-                .duration(0)
-                .style('opacity', .9);
-              div.html(d.current_pos + ' <span class="' + style.tooltip_name + '">' + d.name + '</span>')
-                .style('left', (event.pageX + 15) + 'px')
-                .style('top', (event.pageY - 28) + 'px');
-              })
-            .on('mouseout', (event, d) => {
-              d3.select('.' + d3.select(event.currentTarget).attr('data-line-id'))
-                .attr('stroke', 'rgba(0, 0, 0, 0.1)')
-                .attr('stroke-width', '1px');
-              d3.selectAll('.' + style.dot + '.dot_' + d3.select(event.currentTarget).attr('data-line-id'))
-                .attr('r', 2)
-                .attr('fill', 'rgba(0, 0, 0, 0.1)');
-              d3.selectAll('.' + style.dot_text + '.dot_' + d3.select(event.currentTarget).attr('data-line-id'))
-                .style('font-size', 0)
-              div.transition()
-                .delay(200)
-                .duration(500)
-                .style('opacity', 0);
-             });
-        }
         updateData();
-      }, 1000);
+        if (to_be_added_slices[0].length === 0) {
+          clearInterval(interval1);
+          let i = 2;
+          setTimeout(() => {
+            interval2 = setInterval(() => {
+              this.activateLine('line_' + i, slices[i], div);
+              if (i > 2) {
+                this.deactivateLine('line_' + (i - 1), slices[i], div, false);
+              }
+              i++;
+              if (i >= slices.length ) {
+                clearInterval(interval2)
+                setTimeout(() => {
+                  this.deactivateLine('line_' + (i - 1), slices[i], div, true, false);
+                  setTimeout(() => {
+                    d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
+                      .style('font-size', '15pt');
+                    this.createInteractiveLayer(svg, line, slices, div);
+                  }, 1000); // Wait before creating the interactivity layer.
+                }, 1500); // Wait before hiding the last driver
+              }
+            }, 1500);  // Wait between activating each line.
+          }, 2000); // Wait before showing the lines.
+        }
+      }, 1000); // Wait between showing each race.
       
       // Add dots.
       svg.selectAll('.' + style.dot)
@@ -232,7 +218,13 @@ class App extends Component {
         .attr('cx', (d) => xScale(d.x))
         .attr('cy', (d) => yScale(d.y))
         .attr('fill', (d) => d.color)
-        .attr('r', (d) => (d.highlighted === true) ? 6 : 2);
+        .attr('r', (d) => (d.highlighted === true) ? 6 : 2)
+        .on('mouseover', (event, d) => {
+          if (d.highlighted === true) {
+            d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
+              .style('font-size', '15pt');
+          }
+        });
 
       // Add dot texts.
        svg.selectAll('.' + style.dot_text)
@@ -256,6 +248,60 @@ class App extends Component {
         .attr('y', yScale(max_y_axis_value - title_offset))
         .html(title_html);
     });
+  }
+  activateLine(line_id, d, div) {
+    d3.select('.' + line_id)
+      .attr('stroke', '#000')
+      .attr('stroke-width', '2px');
+    d3.selectAll('.' + style.dot + '.dot_' + line_id)
+      .attr('r', 4)
+      .attr('fill', '#000');
+    d3.selectAll('.' + style.dot_text)
+      .style('font-size', 0)
+    d3.selectAll('.' + style.dot_text + '.dot_' + line_id)
+      .style('font-size', '13pt');
+    div.transition()
+      .duration(0)
+      .style('opacity', .9);
+
+    let left = (event && event.pageX) ? (event.pageX + 15) + 'px' : (d3.selectAll('.' + style.dot + '.dot_' + line_id).nodes()[races.length - 4].getBoundingClientRect().x) + 'px';
+    let top = (event && event.pageY) ? (event.pageY - 20) + 'px' : (d3.selectAll('.' + style.dot + '.dot_' + line_id).nodes()[races.length - 4].getBoundingClientRect().y + 20) + 'px';
+
+    div.html(d.current_pos + ' <span class="' + style.tooltip_name + '">' + d.name + '</span>')
+      .style('left', left)
+      .style('top', top);
+  }
+  deactivateLine(line_id, d, div, deactive_tooltip = true, tooltip_delay = true) {
+      d3.select('.' + line_id)
+        .attr('stroke', 'rgba(0, 0, 0, 0.1)')
+        .attr('stroke-width', '1px');
+      d3.selectAll('.' + style.dot + '.dot_' + line_id)
+        .attr('r', 2)
+        .attr('fill', 'rgba(0, 0, 0, 0.1)');
+      d3.selectAll('.' + style.dot_text + '.dot_' + line_id)
+        .style('font-size', 0)
+      if (deactive_tooltip === true) {
+        if (tooltip_delay === true) {
+          div.transition()
+            .delay(200)
+            .duration(500)
+            .style('opacity', 0);
+        }
+        else {
+          div.style('opacity', 0);
+        }
+      }
+  }
+  createInteractiveLayer(svg, line, slices, div) {
+    svg.selectAll('lines_interactivity').data(slices).enter().append('g').append('path')
+      .attr('class', style.line_interactivity)
+      .attr('data-line-id', (d, i) => 'line_' + i)
+      .attr('stroke', (d) => 'transparent')
+      .attr('stroke-opacity', (d) => 1)
+      .attr('stroke-width', (d) => (d.highlighted === true) ? '0': '10px')
+      .attr('d', (d) => line(d.values))
+      .on('mouseover', (event, d) => this.activateLine(d3.select(event.currentTarget).attr('data-line-id'), d, div))
+      .on('mouseout', (event, d) => this.deactivateLine(d3.select(event.currentTarget).attr('data-line-id'), d, div));
   }
   // shouldComponentUpdate(nextProps, nextState) {}
   // static getDerivedStateFromProps(props, state) {}
