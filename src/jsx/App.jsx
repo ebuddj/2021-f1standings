@@ -56,6 +56,11 @@ class App extends Component {
           height = 600,
           adj = 50;
 
+    let div = d3.select('.' + style.app)
+                .append('div')
+                .attr('class', style.tooltip)
+                .style('opacity', 0);
+
     // We are appending SVG first.
     const svg = d3.select('.' + style.chart_container).append('svg')
       .attr('preserveAspectRatio', 'xMinYMin meet')
@@ -67,16 +72,18 @@ class App extends Component {
       let data_points = [];
       let slices = data.map((values, i) => {
         return {
-          color:(i === 0) ? '#0600ef' : (i === 1) ? '#00d2be' : 'rgba(0, 0, 0, 0.5)', 
+          color:(i === 0) ? '#0600ef' : (i === 1) ? '#00d2be' : 'rgba(0, 0, 0, 0.1)', 
+          current_pos: i + 1,
           highlighted:(i < 2) ? true : false,
           name:values.name,
           values:races.map((race, j) => {
             let max = d3.max(data, (d) => { return +d[race]; });
             if (race !== '') {
               data_points.push({
-                color:(i === 0) ? '#0600ef' : (i === 1) ? '#00d2be' : 'rgba(0, 0, 0, 0.5)', 
+                color:(i === 0) ? '#0600ef' : (i === 1) ? '#00d2be' : 'rgba(0, 0, 0, 0.1)', 
+                dot_line_class:'dot_line_' + i,
                 highlighted:(i < 2) ? true : false,
-                position:(parseInt(values[race]) >= max) ? 'top' : 'bottom',
+                position:(parseInt(values[race]) >= max) ? 'top' : (i >= 2) ? 'top' : 'bottom',
                 x:j,
                 y:+values[race]
               });
@@ -103,9 +110,7 @@ class App extends Component {
       yScale.domain([0, max_y_axis_value]);
 
       // Grid lines.
-      const make_y_gridlines = () => {
-        return d3.axisLeft(yScale).ticks(parseInt(max_y_axis_value / max_y_axis_step) - 1).tickValues(d3.range(0, max_y_axis_value, max_y_axis_step));
-      }
+      const make_y_gridlines = () => d3.axisLeft(yScale).ticks(parseInt(max_y_axis_value / max_y_axis_step) - 1).tickValues(d3.range(0, max_y_axis_value, max_y_axis_step));
       // Add the Y gridlines
       svg.append('g')
         .attr('class', style.grid)
@@ -145,22 +150,27 @@ class App extends Component {
         .text('Points');
 
 
-      // Create the lines with current data..
+      // Create the lines with current data.
       const lines = svg.selectAll('lines').data(slices).enter().append('g');
+      const line = d3.line()
+        .x((d, i) => xScale(i))
+        .y((d, i) => yScale(d.points));
       const updateData = () => {
         // Remove any old lines.
         svg.selectAll('.' + style.line).remove();
 
         // Add the lines.
-        const line = d3.line()
-          .x((d, i) => { return xScale(i); })
-          .y((d, i) => { return yScale(d.points); });
-
         lines.append('path')
-          .attr('class', style.line)
-          .attr('stroke', (d, i) => { return d.color; })
-          .attr('stroke-width', (d) => { return (d.highlighted === true) ? '3px': '1px'; })
-          .attr('d', (d) => { return line(d.values); });
+            .attr('class', (d, i) => style.line + ' line_' + i)
+            .attr('stroke', (d) => d.color)
+            .attr('stroke-width', (d) => (d.highlighted === true) ? '4px': '1px')
+            .attr('d', (d) => line(d.values))
+            .on('mouseover', (event, d) => {
+              if (d.highlighted === true) {
+                d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
+                  .style('font-size', '15pt');
+              }
+            });
       };
 
       // Add data in an interval.
@@ -171,23 +181,58 @@ class App extends Component {
         });
         if (to_be_added_slices[0].length === 0) {
           clearInterval(interval);
+          svg.selectAll('lines_interactivity').data(slices).enter().append('g').append('path')
+            .attr('class', style.line_interactivity)
+            .attr('data-line-id', (d, i) => 'line_' + i)
+            .attr('stroke', (d) => 'transparent')
+            .attr('stroke-opacity', (d) => 1)
+            .attr('stroke-width', (d) => (d.highlighted === true) ? '0': '10px')
+            .attr('d', (d) => line(d.values))
+            .on('mouseover', (event, d) => {
+              d3.select('.' + d3.select(event.currentTarget).attr('data-line-id'))
+                .attr('stroke', '#000')
+                .attr('stroke-width', '2px');
+              d3.selectAll('.' + style.dot + '.dot_' + d3.select(event.currentTarget).attr('data-line-id'))
+                .attr('r', 4)
+                .attr('fill', '#000');
+              d3.selectAll('.' + style.dot_text)
+                .style('font-size', 0)
+              d3.selectAll('.' + style.dot_text + '.dot_' + d3.select(event.currentTarget).attr('data-line-id'))
+                .style('font-size', '13pt');
+              div.transition()
+                .duration(0)
+                .style('opacity', .9);
+              div.html(d.current_pos + ' <span class="' + style.tooltip_name + '">' + d.name + '</span>')
+                .style('left', (event.pageX + 15) + 'px')
+                .style('top', (event.pageY - 28) + 'px');
+              })
+            .on('mouseout', (event, d) => {
+              d3.select('.' + d3.select(event.currentTarget).attr('data-line-id'))
+                .attr('stroke', 'rgba(0, 0, 0, 0.1)')
+                .attr('stroke-width', '1px');
+              d3.selectAll('.' + style.dot + '.dot_' + d3.select(event.currentTarget).attr('data-line-id'))
+                .attr('r', 2)
+                .attr('fill', 'rgba(0, 0, 0, 0.1)');
+              d3.selectAll('.' + style.dot_text + '.dot_' + d3.select(event.currentTarget).attr('data-line-id'))
+                .style('font-size', 0)
+              div.transition()
+                .delay(200)
+                .duration(500)
+                .style('opacity', 0);
+             });
         }
         updateData();
-      }, 1000);
+      }, 1);
       
       // Add dots.
       svg.selectAll('.' + style.dot)
         .data(data_points)
         .enter().append('circle')
-        .attr('class', style.dot)
-        .attr('cx', (d) => { return xScale(d.x) })
-        .attr('cy', (d) => { return yScale(d.y) })
-        .attr('fill', (d, i) => {
-          return d.color;
-        })
-        .attr('r', (d) => {
-          return (d.highlighted === true) ? 6 : 2;
-        });
+        .attr('class', (d) => style.dot + ' ' + d.dot_line_class)
+        .attr('cx', (d) => xScale(d.x))
+        .attr('cy', (d) => yScale(d.y))
+        .attr('fill', (d) => d.color)
+        .attr('r', (d) => (d.highlighted === true) ? 6 : 2);
 
       // Add dot texts.
        svg.selectAll('.' + style.dot_text)
@@ -195,25 +240,20 @@ class App extends Component {
         .enter().append('text')
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'central')
-        .attr('x', (d) => { return xScale(d.x); })
-        .attr('y', (d) => {
-          return (d.position === 'top') ? yScale(d.y + 10) : yScale(d.y - 10);
-        })
-        .style('font-weight', (d, i) => {
-          return (d.position === 'top') ? '600' : '400';
-        })
-        .attr('class', style.dot_text)
-        .text((d) => {
-          return (d.highlighted === true) ? d.y : '';
-        });
+        .attr('x', (d) => xScale(d.x))
+        .attr('y', (d) => (d.position === 'top') ? yScale(d.y + 10) : yScale(d.y - 10))
+        .style('font-weight', (d, i) => (d.position === 'top') ? 600 : 400)
+        .style('font-size', (d, i) => (d.highlighted === true) ? '15pt' : 0)
+        .attr('class', (d) => style.dot_text + ' ' + d.dot_line_class)
+        .text((d) => (d.highlighted === true) ? d.y : d.y);
 
       svg.append('foreignObject')
+        .attr('alignment-baseline', 'central')
+        .attr('height', 200)
         .attr('text-anchor', 'middle')
         .attr('width', 450)
         .attr('x', xScale(1))
         .attr('y', yScale(max_y_axis_value - title_offset))
-        .attr('height', 200)
-        .attr('alignment-baseline', 'central')
         .html(title_html);
     });
   }
