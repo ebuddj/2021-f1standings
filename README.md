@@ -18,6 +18,7 @@ This implementation is inspired by this post: https://www.instagram.com/p/CQ4ApH
 **Sources**
 * [ESPN](https://www.espn.com/f1/standings)
 * [IBAN](https://www.iban.com/country-codes)
+* [F1I](https://f1i.com/standings)
 
 **EBU links**
 * [News Exchange](https://news-exchange.ebu.ch/item_detail/4a0e2cd4ff54f40e4a43ef1bf7151b4a/2021_20030974)
