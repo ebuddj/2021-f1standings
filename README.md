@@ -21,7 +21,8 @@ This implementation is inspired by this post: https://www.instagram.com/p/CQ4ApH
 * [F1I](https://f1i.com/standings)
 
 **EBU links**
-* [News Exchange](https://news-exchange.ebu.ch/item_detail/4a0e2cd4ff54f40e4a43ef1bf7151b4a/2021_20030974)
+* [News Exchange](https://news-exchange.ebu.ch/item_detail/4a0e2cd4ff54f40e4a43ef1bf7151b4a/2021_20030974), 16.7.2021
+* [News Exchange](https://news-exchange.ebu.ch/item_detail/6d28fb76525ebc699f68a9f67e661a51/2021_20031641), 18.7.2021
 
 **Used by**
 * []()
