@@ -120,16 +120,18 @@ class App extends Component {
       svg.append('g')
         .attr('class', style.grid)
         .call(make_y_gridlines()
-            .tickSize(-width - 20)
-            .tickFormat('')
+          .tickSize(-width - 20)
+          .tickFormat('')
         );
 
       // Grid Axes.
-      const xaxis = d3.axisBottom().ticks(races.length - 1).tickFormat((i) => { return races[i]; }).scale(xScale);
       svg.append('g')
         .attr('class', style.axis + ' ' + style.xaxis)
         .attr('transform', 'translate(0,' + height + ')')
-        .call(xaxis)
+        .call(d3.axisBottom()
+          .ticks(races.length - 1)
+          .tickFormat(i => races[i])
+          .scale(xScale))
         .append('text')
         .attr('y', 43)
         .attr('x', 3)
@@ -143,10 +145,12 @@ class App extends Component {
                                   .attr('xlink:href', (d) => { return flags[d]; })
                                   .attr('height', 30).attr('width', 30).attr('x', -15).attr('y', 25);
 
-      const yaxis = d3.axisLeft().ticks(parseInt(max_y_axis_value / max_y_axis_step)).tickValues(d3.range(0, max_y_axis_value + max_y_axis_step, max_y_axis_step)).scale(yScale);
       svg.append('g')
         .attr('class', style.axis)
-        .call(yaxis)
+        .call(d3.axisLeft()
+          .ticks(parseInt(max_y_axis_value / max_y_axis_step))
+          .tickValues(d3.range(0, max_y_axis_value + max_y_axis_step, max_y_axis_step))
+          .scale(yScale))
         .append('text')
         .attr('transform', 'rotate(-90)')
         .attr('dy', '1em')
