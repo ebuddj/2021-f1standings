@@ -5,7 +5,7 @@ import style from './../styles/styles.less';
 import * as d3 from 'd3';
 
 // https://github.com/Tarkeasy/round-flags
-import { BH,IT,PT,ES,MC,AZ,FR,AT,GB} from 'round-flags';
+import { BH,IT,PT,ES,MC,AZ,FR,AT,GB,HU} from 'round-flags';
 
 let interval1,
     interval2,
@@ -21,6 +21,7 @@ flags['FRA'] = FR;
 flags['AUT'] = AT;
 flags['AUT2'] = AT;
 flags['GBR'] = GB;
+flags['HUN'] = HU;
 
 
 const getHashValue = (key) => {
@@ -31,11 +32,11 @@ const getHashValue = (key) => {
 const data_type = getHashValue('type') ? getHashValue('type') : 'drivers',
       title = getHashValue('title') ? (getHashValue('title') === 'false') ? '' : '<h1>' + getHashValue('title').replace(/%20/g, ' ') + '</h1>' : '<h1>Title battle 2021</h1>';
 
-const max_y_axis_value = (data_type === 'drivers') ? 200 : 300,
+const max_y_axis_value = (data_type === 'drivers') ? 225 : 350,
       max_y_axis_step = (data_type === 'drivers') ? 25 : 50,
-      title_offset = (data_type === 'drivers') ? 13 : 10,
+      title_offset = (data_type === 'drivers') ? 2 : 4,
       title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>' : '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Red Bull Racing Honda</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Mercedes AMG Petronas</span></h3></div></div>',
-      races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2','GBR'];
+      races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2','GBR','HUN'];
 
 class App extends Component {
   constructor(props) {
