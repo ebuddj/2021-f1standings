@@ -35,7 +35,7 @@ const data_type = getHashValue('type') ? getHashValue('type') : 'drivers',
 const max_y_axis_value = (data_type === 'drivers') ? 225 : 350,
       max_y_axis_step = (data_type === 'drivers') ? 25 : 50,
       title_offset = (data_type === 'drivers') ? 2 : 4,
-      title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>' : '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Red Bull Racing Honda</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Mercedes AMG Petronas</span></h3></div></div>',
+      title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.redbull + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Mercedes</span></h3></div></div>' : '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Mercedes AMG Petronas</span></h3></div><div><h3 class="' + style.redbull + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Red Bull Racing Honda</span></h3></div></div>',
       races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2','GBR','HUN'];
 
 class App extends Component {
@@ -78,7 +78,7 @@ class App extends Component {
       let data_points = [];
       let slices = data.map((values, i) => {
         return {
-          color:(i === 0) ? '#0600ef' : (i === 1) ? '#00d2be' : 'rgba(0, 0, 0, 0.1)', 
+          color:(i === 0) ? '#00d2be' : (i === 1) ? '#0600ef' : 'rgba(0, 0, 0, 0.1)', 
           current_pos: i + 1,
           highlighted:(i < 2) ? true : false,
           name:values.name,
@@ -86,7 +86,7 @@ class App extends Component {
             let max = d3.max(data, (d) => { return +d[race]; });
             if (race !== '') {
               data_points.push({
-                color:(i === 0) ? '#0600ef' : (i === 1) ? '#00d2be' : 'rgba(0, 0, 0, 0.1)', 
+                color:(i === 0) ? '#00d2be' : (i === 1) ? '#0600ef' : 'rgba(0, 0, 0, 0.1)', 
                 dot_line_class:'dot_line_' + i,
                 highlighted:(i < 2) ? true : false,
                 position:(parseInt(values[race]) >= max) ? 'top' : (i >= 2) ? 'top' : 'bottom',
