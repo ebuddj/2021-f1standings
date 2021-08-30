@@ -5,7 +5,7 @@ import style from './../styles/styles.less';
 import * as d3 from 'd3';
 
 // https://github.com/Tarkeasy/round-flags
-import { BH,IT,PT,ES,MC,AZ,FR,AT,GB,HU} from 'round-flags';
+import { BH,IT,PT,ES,MC,AZ,FR,AT,GB,HU,BE} from 'round-flags';
 
 let interval1,
     interval2,
@@ -22,6 +22,7 @@ flags['AUT'] = AT;
 flags['AUT2'] = AT;
 flags['GBR'] = GB;
 flags['HUN'] = HU;
+flags['BEL'] = BE;
 
 
 const getHashValue = (key) => {
@@ -36,7 +37,7 @@ const max_y_axis_value = (data_type === 'drivers') ? 225 : 350,
       max_y_axis_step = (data_type === 'drivers') ? 25 : 50,
       title_offset = (data_type === 'drivers') ? 2 : 4,
       title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div><div><h3 class="' + style.redbull + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div></div>' : '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Mercedes AMG Petronas</span></h3></div><div><h3 class="' + style.redbull + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Red Bull Racing Honda</span></h3></div></div>',
-      races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2','GBR','HUN'];
+      races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2','GBR','HUN','BEL'];
 
 class App extends Component {
   constructor(props) {
@@ -83,13 +84,13 @@ class App extends Component {
           highlighted:(i < 2) ? true : false,
           name:values.name,
           values:races.map((race, j) => {
-            let max = d3.max(data, (d) => { return +d[race]; });
+            let max = d3.max(data, (d) => +d[race]);
             if (race !== '') {
               data_points.push({
                 color:(i === 0) ? '#00d2be' : (i === 1) ? '#0600ef' : 'rgba(0, 0, 0, 0.1)', 
                 dot_line_class:'dot_line_' + i,
                 highlighted:(i < 2) ? true : false,
-                position:(parseInt(values[race]) >= max) ? 'top' : (i >= 2) ? 'top' : 'bottom',
+                position:(parseFloat(values[race]) >= max) ? 'top' : (i >= 2) ? 'top' : 'bottom',
                 x:j,
                 y:+values[race]
               });
@@ -139,12 +140,13 @@ class App extends Component {
         .attr('text-anchor', 'middle')
         .text('Races');
 
-      svg.select('.' + style.axis).selectAll('.tick')
-                                  .data(races)
-                                  .append('svg:image')
-                                  .attr('class', style.axis_image)
-                                  .attr('xlink:href', (d) => { return flags[d]; })
-                                  .attr('height', 30).attr('width', 30).attr('x', -15).attr('y', 25);
+      svg.select('.' + style.axis)
+        .selectAll('.tick')
+        .data(races)
+        .append('svg:image')
+        .attr('class', style.axis_image)
+        .attr('xlink:href', (d) => { return flags[d]; })
+        .attr('height', 30).attr('width', 30).attr('x', -15).attr('y', 25);
 
       svg.append('g')
         .attr('class', style.axis)
