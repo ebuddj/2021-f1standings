@@ -24,6 +24,10 @@ flags['GBR'] = GB;
 flags['HUN'] = HU;
 flags['BEL'] = BE;
 flags['NED'] = NL;
+flags['ITA2'] = IT;
+
+const mercedes_color = '#00d2be';
+const redbull_color = '#0600ef';
 
 
 const getHashValue = (key) => {
@@ -38,7 +42,7 @@ const max_y_axis_value = (data_type === 'drivers') ? 225 : 350,
       max_y_axis_step = (data_type === 'drivers') ? 25 : 50,
       title_offset = (data_type === 'drivers') ? 2 : 4,
       title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div><div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div></div>' : '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Mercedes AMG Petronas</span></h3></div><div><h3 class="' + style.redbull + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Red Bull Racing Honda</span></h3></div></div>',
-      races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2','GBR','HUN','BEL','NED'];
+      races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2','GBR','HUN','BEL','NED','ITA2'];
 
 class App extends Component {
   constructor(props) {
@@ -64,10 +68,10 @@ class App extends Component {
           height = 600,
           adj = 50;
 
-    let div = d3.select('.' + style.app)
-                .append('div')
-                .attr('class', style.tooltip)
-                .style('opacity', 0);
+    const div = d3.select('.' + style.app)
+      .append('div')
+      .attr('class', style.tooltip)
+      .style('opacity', 0);
 
     // We are appending SVG first.
     const svg = d3.select('.' + style.chart_container).append('svg')
@@ -80,7 +84,7 @@ class App extends Component {
       let data_points = [];
       let slices = data.map((values, i) => {
         return {
-          color:(data_type === 'driver') ? (i === 1) ? '#00d2be' : (i === 0) ? '#0600ef' : 'rgba(0, 0, 0, 0.1)' : (i === 0) ? '#00d2be' : (i === 1) ? '#0600ef' : 'rgba(0, 0, 0, 0.1)', 
+          color:(data_type === 'drivers') ? (i === 0) ? redbull_color : (i === 1) ? mercedes_color : 'rgba(0, 0, 0, 0.1)' : (i === 0) ? mercedes_color : (i === 1) ? redbull_color : 'rgba(0, 0, 0, 0.1)',
           current_pos: i + 1,
           highlighted:(i < 2) ? true : false,
           name:values.name,
@@ -88,7 +92,7 @@ class App extends Component {
             let max = d3.max(data, (d) => +d[race]);
             if (race !== '') {
               data_points.push({
-                color:(data_type === 'driver') ? (i === 1) ? '#00d2be' : (i === 0) ? '#0600ef' : 'rgba(0, 0, 0, 0.1)' : (i === 0) ? '#00d2be' : (i === 1) ? '#0600ef' : 'rgba(0, 0, 0, 0.1)', 
+                color:(data_type === 'drivers') ? (i === 0) ? redbull_color : (i === 1) ? mercedes_color : 'rgba(0, 0, 0, 0.1)' : (i === 0) ? mercedes_color : (i === 1) ? redbull_color : 'rgba(0, 0, 0, 0.1)',
                 dot_line_class:'dot_line_' + i,
                 highlighted:(i < 2) ? true : false,
                 position:(parseFloat(values[race]) >= max) ? 'top' : (i >= 2) ? 'top' : 'bottom',
@@ -231,7 +235,7 @@ class App extends Component {
         .on('mouseover', (event, d) => {
           if (d.highlighted === true) {
             d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
-              .style('font-size', '15pt');
+              .style('font-size', '12pt');
           }
         });
 
@@ -242,9 +246,9 @@ class App extends Component {
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'central')
         .attr('x', (d) => xScale(d.x))
-        .attr('y', (d) => (d.position === 'top') ? yScale(d.y + 10) : yScale(d.y - 10))
+        .attr('y', (d) => (d.position === 'top') ? yScale(d.y + 7) : yScale(d.y - 7))
         .style('font-weight', (d, i) => (d.position === 'top') ? 600 : 400)
-        .style('font-size', (d, i) => (d.highlighted === true) ? '15pt' : 0)
+        .style('font-size', (d, i) => (d.highlighted === true) ? '12pt' : 0)
         .attr('class', (d) => style.dot_text + ' ' + d.dot_line_class)
         .text((d) => (d.highlighted === true) ? d.y : d.y);
 
