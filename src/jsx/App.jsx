@@ -241,15 +241,16 @@ class App extends Component {
         });
 
       // Add dot texts.
+      let position_offset = (data_type === 'drivers') ? 7 : 10;
        svg.selectAll('.' + style.dot_text)
         .data(data_points)
         .enter().append('text')
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'central')
         .attr('x', (d) => xScale(d.x))
-        .attr('y', (d) => (d.position === 'top') ? yScale(d.y + 7) : yScale(d.y - 7))
+        .attr('y', (d) => (d.position === 'top') ? yScale(d.y + position_offset) : yScale(d.y - position_offset))
         .style('font-weight', (d, i) => (d.position === 'top') ? 600 : 400)
-        .style('font-size', (d, i) => (d.highlighted === true) ? '12pt' : 0)
+        .style('font-size', (d, i) => (d.highlighted === true) ? '11pt' : 0)
         .attr('class', (d) => style.dot_text + ' ' + d.dot_line_class)
         .text((d) => (d.highlighted === true) ? d.y : d.y);
 
