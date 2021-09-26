@@ -186,7 +186,7 @@ class App extends Component {
             .on('mouseover', (event, d) => {
               if (d.highlighted === true) {
                 d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
-                  .style('font-size', '15pt');
+                  .style('font-size', '11pt');
               }
             });
       };
@@ -214,7 +214,7 @@ class App extends Component {
                   this.deactivateLine('line_' + (i - 1), slices[i], div, true, false);
                   setTimeout(() => {
                     d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
-                      .style('font-size', '15pt');
+                      .style('font-size', '11pt');
                     this.createInteractiveLayer(svg, line, slices, div);
                   }, 1000); // Wait before creating the interactivity layer.
                 }, 1500); // Wait before hiding the last driver
@@ -236,7 +236,7 @@ class App extends Component {
         .on('mouseover', (event, d) => {
           if (d.highlighted === true) {
             d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
-              .style('font-size', '12pt');
+              .style('font-size', '11pt');
           }
         });
 
@@ -274,7 +274,7 @@ class App extends Component {
     d3.selectAll('.' + style.dot_text)
       .style('font-size', 0)
     d3.selectAll('.' + style.dot_text + '.dot_' + line_id)
-      .style('font-size', '13pt');
+      .style('font-size', '11pt');
     div.transition()
       .duration(0)
       .style('opacity', .9);
