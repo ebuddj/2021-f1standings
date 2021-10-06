@@ -107,7 +107,7 @@ class App extends Component {
             }
           })
         }
-      })
+      });
 
       // Prepare the initial data and store the rest for later use.
       let to_be_added_slices = {};
