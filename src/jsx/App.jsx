@@ -5,7 +5,7 @@ import style from './../styles/styles.less';
 import * as d3 from 'd3';
 
 // https://github.com/Tarkeasy/round-flags
-import { BH,IT,PT,ES,MC,AZ,FR,AT,GB,HU,BE,NL,RU} from 'round-flags';
+import { BH,IT,PT,ES,MC,AZ,FR,AT,GB,HU,BE,NL,RU,TR} from 'round-flags';
 
 let interval1,
     interval2,
@@ -26,10 +26,11 @@ flags['BEL'] = BE;
 flags['NED'] = NL;
 flags['ITA2'] = IT;
 flags['RUS'] = RU;
+flags['TUR'] = TR;
 
 const mercedes_color = '#00d2be';
 const redbull_color = '#0600ef';
-
+let animation_done = false;
 
 const getHashValue = (key) => {
   let matches = location.hash.match(new RegExp(key+'=([^&]*)'));
@@ -39,11 +40,15 @@ const getHashValue = (key) => {
 const data_type = getHashValue('type') ? getHashValue('type') : 'drivers',
       title = getHashValue('title') ? (getHashValue('title') === 'false') ? '' : '<h1>' + getHashValue('title').replace(/%20/g, ' ') + '</h1>' : '<h1>Title battle 2021</h1>';
 
-const max_y_axis_value = (data_type === 'drivers') ? 250 : 400,
+const max_y_axis_value = (data_type === 'drivers') ? 300 : 450,
       max_y_axis_step = (data_type === 'drivers') ? 25 : 50,
       title_offset = (data_type === 'drivers') ? 2 : 4,
-      title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3></div><div><h3 class="' + style.redbull + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3></div></div>' : '<div class="' + style.title_container + '">' + title + '<div><h3 class="' + style.mercedes + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Mercedes AMG Petronas</span></h3></div><div><h3 class="' + style.redbull + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Red Bull Racing Honda</span></h3></div></div>',
-      races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2','GBR','HUN','BEL','NED','ITA2','RUS'];
+      first_driver = '<h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3>',
+      second_driver = '<h3 class="' + style.mercedes + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Hamilton #44</span><span class="' + style.team + '">Mercedes</span></h3>',
+      first_team = '<h3 class="' + style.mercedes + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Mercedes AMG Petronas</span></h3>',
+      second_team = '<h3 class="' + style.redbull + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Red Bull Racing Honda</span></h3>',
+      title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '">' + title + '<div>' + first_driver + '</div><div>' + second_driver + '</div></div>' : '<div class="' + style.title_container + '">' + title + '<div>' + first_team + '</div><div>' + second_team + '</div></div>',
+      races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2','GBR','HUN','BEL','NED','ITA2','RUS','TUR'];
 
 class App extends Component {
   constructor(props) {
@@ -85,7 +90,7 @@ class App extends Component {
       let data_points = [];
       let slices = data.map((values, i) => {
         return {
-          color:(data_type === 'drivers') ? (i === 1) ? redbull_color : (i === 0) ? mercedes_color : 'rgba(0, 0, 0, 0.1)' : (i === 0) ? mercedes_color : (i === 1) ? redbull_color : 'rgba(0, 0, 0, 0.1)',
+          color:(data_type === 'drivers') ? (i === 0) ? redbull_color : (i === 1) ? mercedes_color : 'rgba(0, 0, 0, 0.1)' : (i === 0) ? mercedes_color : (i === 1) ? redbull_color : 'rgba(0, 0, 0, 0.1)',
           current_pos: i + 1,
           highlighted:(i < 2) ? true : false,
           name:values.name,
@@ -93,7 +98,7 @@ class App extends Component {
             let max = d3.max(data, (d) => +d[race]);
             if (race !== '') {
               data_points.push({
-                color:(data_type === 'drivers') ? (i === 1) ? redbull_color : (i === 0) ? mercedes_color : 'rgba(0, 0, 0, 0.1)' : (i === 0) ? mercedes_color : (i === 1) ? redbull_color : 'rgba(0, 0, 0, 0.1)',
+                color:(data_type === 'drivers') ? (i === 0) ? redbull_color : (i === 1) ? mercedes_color : 'rgba(0, 0, 0, 0.1)' : (i === 0) ? mercedes_color : (i === 1) ? redbull_color : 'rgba(0, 0, 0, 0.1)',
                 dot_line_class:'dot_line_' + i,
                 highlighted:(i < 2) ? true : false,
                 position:(parseFloat(values[race]) >= max) ? 'top' : (i >= 2) ? 'top' : 'bottom',
@@ -141,8 +146,8 @@ class App extends Component {
           .tickFormat(i => races[i])
           .scale(xScale))
         .append('text')
-        .attr('y', 43)
-        .attr('x', 3)
+        .attr('y', 45)
+        .attr('x', -15)
         .attr('text-anchor', 'middle')
         .text('Races');
 
@@ -152,7 +157,7 @@ class App extends Component {
         .append('svg:image')
         .attr('class', style.axis_image)
         .attr('xlink:href', (d) => { return flags[d]; })
-        .attr('height', 30).attr('width', 30).attr('x', -15).attr('y', 25);
+        .attr('height', 30).attr('width', 30).attr('x', -15).attr('y', 28);
 
       svg.append('g')
         .attr('class', style.axis)
@@ -184,9 +189,9 @@ class App extends Component {
             .attr('stroke-width', (d) => (d.highlighted === true) ? '4px': '1px')
             .attr('d', (d) => line(d.values))
             .on('mouseover', (event, d) => {
-              if (d.highlighted === true) {
+              if (d.highlighted === true && animation_done === true) {
                 d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
-                  .style('font-size', '11pt');
+                  .style('font-size', '10pt');
               }
             });
       };
@@ -214,7 +219,7 @@ class App extends Component {
                   this.deactivateLine('line_' + (i - 1), slices[i], div, true, false);
                   setTimeout(() => {
                     d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
-                      .style('font-size', '11pt');
+                      .style('font-size', '10pt');
                     this.createInteractiveLayer(svg, line, slices, div);
                   }, 1000); // Wait before creating the interactivity layer.
                 }, 1500); // Wait before hiding the last driver
@@ -234,9 +239,9 @@ class App extends Component {
         .attr('fill', (d) => d.color)
         .attr('r', (d) => (d.highlighted === true) ? 6 : 2)
         .on('mouseover', (event, d) => {
-          if (d.highlighted === true) {
+          if (d.highlighted === true && animation_done === true) {
             d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
-              .style('font-size', '11pt');
+              .style('font-size', '10pt');
           }
         });
 
@@ -250,7 +255,7 @@ class App extends Component {
         .attr('x', (d) => xScale(d.x))
         .attr('y', (d) => (d.position === 'top') ? yScale(d.y + position_offset) : yScale(d.y - position_offset))
         .style('font-weight', (d, i) => (d.position === 'top') ? 600 : 400)
-        .style('font-size', (d, i) => (d.highlighted === true) ? '11pt' : 0)
+        .style('font-size', (d, i) => (d.highlighted === true) ? '10pt' : 0)
         .attr('class', (d) => style.dot_text + ' ' + d.dot_line_class)
         .text((d) => (d.highlighted === true) ? d.y : d.y);
 
@@ -274,7 +279,7 @@ class App extends Component {
     d3.selectAll('.' + style.dot_text)
       .style('font-size', 0)
     d3.selectAll('.' + style.dot_text + '.dot_' + line_id)
-      .style('font-size', '11pt');
+      .style('font-size', '10pt');
     div.transition()
       .duration(0)
       .style('opacity', .9);
@@ -308,6 +313,7 @@ class App extends Component {
       }
   }
   createInteractiveLayer(svg, line, slices, div) {
+    animation_done = true;
     svg.selectAll('lines_interactivity').data(slices).enter().append('g').append('path')
       .attr('class', style.line_interactivity)
       .attr('data-line-id', (d, i) => 'line_' + i)
