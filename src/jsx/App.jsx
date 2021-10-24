@@ -5,7 +5,7 @@ import style from './../styles/styles.less';
 import * as d3 from 'd3';
 
 // https://github.com/Tarkeasy/round-flags
-import { BH,IT,PT,ES,MC,AZ,FR,AT,GB,HU,BE,NL,RU,TR} from 'round-flags';
+import { BH,IT,PT,ES,MC,AZ,FR,AT,GB,HU,BE,NL,RU,TR,US} from 'round-flags';
 
 let interval1,
     interval2,
@@ -27,6 +27,7 @@ flags['NED'] = NL;
 flags['ITA2'] = IT;
 flags['RUS'] = RU;
 flags['TUR'] = TR;
+flags['USA'] = US;
 
 const mercedes_color = '#00d2be';
 const redbull_color = '#0600ef';
@@ -40,7 +41,7 @@ const getHashValue = (key) => {
 const data_type = getHashValue('type') ? getHashValue('type') : 'drivers',
       title = getHashValue('title') ? (getHashValue('title') === 'false') ? '' : '<h1>' + getHashValue('title').replace(/%20/g, ' ') + '</h1>' : '<h1>Title battle 2021</h1>';
 
-const max_y_axis_value = (data_type === 'drivers') ? 300 : 450,
+const max_y_axis_value = (data_type === 'drivers') ? 300 : 500,
       max_y_axis_step = (data_type === 'drivers') ? 25 : 50,
       title_offset = (data_type === 'drivers') ? 2 : 4,
       first_driver = '<h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3>',
@@ -48,7 +49,7 @@ const max_y_axis_value = (data_type === 'drivers') ? 300 : 450,
       first_team = '<h3 class="' + style.mercedes + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Mercedes AMG Petronas</span></h3>',
       second_team = '<h3 class="' + style.redbull + '"><span class="' + style.position + '">2</span><span class="' + style.name + '">Red Bull Racing Honda</span></h3>',
       title_html = (data_type === 'drivers') ? '<div class="' + style.title_container + '">' + title + '<div>' + first_driver + '</div><div>' + second_driver + '</div></div>' : '<div class="' + style.title_container + '">' + title + '<div>' + first_team + '</div><div>' + second_team + '</div></div>',
-      races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2','GBR','HUN','BEL','NED','ITA2','RUS','TUR'];
+      races = ['','BHR','ITA','PRT','ESP','MCO','AZE','FRA','AUT','AUT2','GBR','HUN','BEL','NED','ITA2','RUS','TUR','USA'];
 
 class App extends Component {
   constructor(props) {
