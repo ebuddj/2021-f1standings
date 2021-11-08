@@ -42,7 +42,7 @@ const getHashValue = (key) => {
 const data_type = getHashValue('type') ? getHashValue('type') : 'drivers',
       title = getHashValue('title') ? (getHashValue('title') === 'false') ? '' : '<h1>' + getHashValue('title').replace(/%20/g, ' ') + '</h1>' : '<h1>Title battle 2021</h1>';
 
-const max_y_axis_value = (data_type === 'drivers') ? 300 : 500,
+const max_y_axis_value = (data_type === 'drivers') ? 350 : 500,
       max_y_axis_step = (data_type === 'drivers') ? 25 : 50,
       title_offset = (data_type === 'drivers') ? 2 : 4,
       first_driver = '<h3 class="' + style.redbull + '"><span class="' + style.position + '">1</span><span class="' + style.name + '">Verstappen #33</span><span class="' + style.team + '">Red Bull</span></h3>',
@@ -62,7 +62,7 @@ class App extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.createChart();
-    }, 500);
+    }, 1000);
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
 
@@ -148,7 +148,7 @@ class App extends Component {
           .tickFormat(i => races[i])
           .scale(xScale))
         .append('text')
-        .attr('y', 45)
+        .attr('y', 41)
         .attr('x', -15)
         .attr('text-anchor', 'middle')
         .text('Races');
@@ -159,10 +159,10 @@ class App extends Component {
         .append('svg:image')
         .attr('class', style.axis_image)
         .attr('xlink:href', (d) => { return flags[d]; })
-        .attr('height', 30).attr('width', 30).attr('x', -15).attr('y', 28);
+        .attr('height', 26).attr('width', 26).attr('x', -13).attr('y', 24);
 
       svg.append('g')
-        .attr('class', style.axis)
+        .attr('class', style.axis + ' ' + style.yaxis)
         .call(d3.axisLeft()
           .ticks(parseInt(max_y_axis_value / max_y_axis_step))
           .tickValues(d3.range(0, max_y_axis_value + max_y_axis_step, max_y_axis_step))
@@ -173,7 +173,6 @@ class App extends Component {
         .attr('y', 6)
         .style('text-anchor', 'end')
         .text('Points');
-
 
       // Create the lines with current data.
       const lines = svg.selectAll('lines').data(slices).enter().append('g');
@@ -193,7 +192,7 @@ class App extends Component {
             .on('mouseover', (event, d) => {
               if (d.highlighted === true && animation_done === true) {
                 d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
-                  .style('font-size', '10pt');
+                  .style('font-size', '9pt');
               }
             });
       };
@@ -221,7 +220,7 @@ class App extends Component {
                   this.deactivateLine('line_' + (i - 1), slices[i], div, true, false);
                   setTimeout(() => {
                     d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
-                      .style('font-size', '10pt');
+                      .style('font-size', '9pt');
                     this.createInteractiveLayer(svg, line, slices, div);
                   }, 1000); // Wait before creating the interactivity layer.
                 }, 1500); // Wait before hiding the last driver
@@ -229,7 +228,7 @@ class App extends Component {
             }, 1500);  // Wait between activating each line.
           }, 2000); // Wait before showing the lines.
         }
-      }, 1000); // Wait between showing each race.
+      }, 750); // Wait between showing each race.
       
       // Add dots.
       svg.selectAll('.' + style.dot)
@@ -243,12 +242,12 @@ class App extends Component {
         .on('mouseover', (event, d) => {
           if (d.highlighted === true && animation_done === true) {
             d3.selectAll('.' + style.dot_text + '.dot_line_0, .' + style.dot_text + '.dot_line_1')
-              .style('font-size', '10pt');
+              .style('font-size', '9pt');
           }
         });
 
       // Add dot texts.
-      let position_offset = (data_type === 'drivers') ? 7 : 10;
+      let position_offset = (data_type === 'drivers') ? 10 : 15;
        svg.selectAll('.' + style.dot_text)
         .data(data_points)
         .enter().append('text')
@@ -257,7 +256,7 @@ class App extends Component {
         .attr('x', (d) => xScale(d.x))
         .attr('y', (d) => (d.position === 'top') ? yScale(d.y + position_offset) : yScale(d.y - position_offset))
         .style('font-weight', (d, i) => (d.position === 'top') ? 600 : 400)
-        .style('font-size', (d, i) => (d.highlighted === true) ? '10pt' : 0)
+        .style('font-size', (d, i) => (d.highlighted === true) ? '9pt' : 0)
         .attr('class', (d) => style.dot_text + ' ' + d.dot_line_class)
         .text((d) => (d.highlighted === true) ? d.y : d.y);
 
